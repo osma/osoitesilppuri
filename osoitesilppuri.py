@@ -33,6 +33,6 @@ postitoimipaikka = Combine(OneOrMore(Word(finalphas)),
                            joinString=" ",
                            adjacent=False).setResultsName("postitoimipaikka")
 
-postiosoite = (lahiosoite + Optional(Suppress(',')) + postinumero + postitoimipaikka).setResultsName("postiosoite")
+postiosoite = (lahiosoite + Optional(Suppress(',')) + Optional(postinumero) + postitoimipaikka).setResultsName("postiosoite")
 
 
