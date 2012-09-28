@@ -24,7 +24,8 @@ osoitenumerovali = Group(osoitenumero + Suppress("-") + osoitenumero).setResults
 
 kirjain = Word(alphas, max=1).setResultsName("kirjain")
 asuntolyhenne = Regex("(as|bst)\.?").setResultsName("asuntolyhenne")
-huoneistotunnus = Group((kirjain | asuntolyhenne) + Optional(numero + Optional(jakokirjain))).setResultsName("huoneistotunnus")
+huoneistotunnus = Group((kirjain | asuntolyhenne) + \
+                  Optional(numero + Optional(jakokirjain))).setResultsName("huoneistotunnus")
 
 lahiosoite = (kadunnimi + \
              Optional((osoitenumerovali | osoitenumero) + \
@@ -34,4 +35,6 @@ postitoimipaikka = Combine(OneOrMore(Word(finalphas)),
                            joinString=" ",
                            adjacent=False).setResultsName("postitoimipaikka")
 
-postiosoite = (lahiosoite + Optional(Suppress(',')) + Optional(postinumero) + postitoimipaikka).setResultsName("postiosoite")
+postiosoite = (lahiosoite + Optional(Suppress(',')) + \
+              Optional(postinumero) + \
+              postitoimipaikka).setResultsName("postiosoite")
