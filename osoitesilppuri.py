@@ -16,17 +16,18 @@ kadunnimi = Combine(OneOrMore(Word(addralphas)),
                     joinString=" ",
                     adjacent=False).setResultsName("kadunnimi")
                   
-osoitenumero = Combine(Word(nums) + Optional("-" + Word(nums))).setResultsName("osoitenumero")
-osoitejakokirjain = Word(alphas, max=1).leaveWhitespace().setResultsName("osoitejakokirjain")
-ht_kirjain = Word(alphas, max=1).setResultsName("kirjain")
-ht_asunto = Regex("(as|bst)\.?").setResultsName("asuntolyhenne")
-ht_numero = Word(nums).setResultsName("numero")
-ht_jakokirjain = Word(alphas, max=1).setResultsName("jakokirjain")
-huoneistotunnus = Group((ht_kirjain | ht_asunto) + Optional(ht_numero + Optional(ht_jakokirjain))).setResultsName("huoneistotunnus")
+numero = Word(nums).setResultsName("numero")
+jakokirjain = Word(alphas, max=1).leaveWhitespace().setResultsName("jakokirjain")
+
+osoitenumero = Group(numero + Optional(jakokirjain)).setResultsName("osoitenumero")
+osoitenumerovali = Group(osoitenumero + Suppress("-") + osoitenumero).setResultsName("osoitenumerovali")
+
+kirjain = Word(alphas, max=1).setResultsName("kirjain")
+asuntolyhenne = Regex("(as|bst)\.?").setResultsName("asuntolyhenne")
+huoneistotunnus = Group((kirjain | asuntolyhenne) + Optional(numero + Optional(jakokirjain))).setResultsName("huoneistotunnus")
 
 lahiosoite = (kadunnimi + \
-             Optional(osoitenumero + \
-                      Optional(osoitejakokirjain) + \
+             Optional((osoitenumerovali | osoitenumero) + \
                       Optional(huoneistotunnus))).setResultsName("lahiosoite")
 postinumero = Word(nums, exact=5).setResultsName("postinumero")
 postitoimipaikka = Combine(OneOrMore(Word(finalphas)),
@@ -34,5 +35,3 @@ postitoimipaikka = Combine(OneOrMore(Word(finalphas)),
                            adjacent=False).setResultsName("postitoimipaikka")
 
 postiosoite = (lahiosoite + Optional(Suppress(',')) + Optional(postinumero) + postitoimipaikka).setResultsName("postiosoite")
-
-
